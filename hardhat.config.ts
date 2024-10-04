@@ -1,67 +1,37 @@
-const { vars } = require("hardhat/config");
-
 require("@nomicfoundation/hardhat-toolbox");
 
-import * as dotenv from "dotenv";
+const dotenv = require("dotenv");
 dotenv.config();
 
-// require("@nomiclabs/hardhat-verify")
-
-const INFURA_API_KEY = process.env.INFURA_API_KEY;
-const SEPOLIA_PRIVATE_KEY = process.env.SEPOLIA_PRIVATE_KEY;
-const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
-//assignment - interaction for the multisig ContractFactory, interaction for deployed Contract, test for the multisig factory and deployed contract
-
-/** @type import('hardhat/config').HardhatUserConfig */
-module.exports = {
+const config = {
   solidity: "0.8.24",
   networks: {
-    sepolia: {
-      url: `https://sepolia.infura.io/v3/${INFURA_API_KEY}`,
-      accounts: [SEPOLIA_PRIVATE_KEY]
-    }
+    // for testnet
+    "lisk-sepolia": {
+      url: process.env.LISK_RPC_URL,
+      accounts: [process.env.SEPOLIA_PRIVATE_KEY],
+      gasPrice: 1000000000,
+    },
   },
-  // Hardhat expects etherscan here, even if you're using Blockscout.
-  etherscan: {
+  etherscan: { 
     // Use "123" as a placeholder, because Blockscout doesn't need a real API key, and Hardhat will complain if this property isn't set.
     apiKey: {
-      sepolia: [ETHERSCAN_API_KEY]
+      "lisk-sepolia": "123",
     },
+    customChains: [
+      {
+        network: "lisk-sepolia",
+        chainId: 4202,
+        urls: {
+          apiURL: "https://sepolia-blockscout.lisk.com/api",
+          browserURL: "https://sepolia-blockscout.lisk.com",
+        },
+      },
+    ],
+  },
   sourcify: {
-    enabled: false
-  }
-}
+    enabled: false,
+  },
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+module.exports = config;
